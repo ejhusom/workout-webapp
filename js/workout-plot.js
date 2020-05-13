@@ -5,6 +5,7 @@ fileSelector.addEventListener("change", (event) => {
 });
 
 var sec = []; 
+var hour = []; 
 var hr = [];
 var lat = [];
 var lon = [];
@@ -23,6 +24,7 @@ document.getElementById('import').onclick = function() {
         var samples = result.RIDE.SAMPLES;
         for (let i = 0; i < samples.length; i++) {
             sec.push(samples[i].SECS);
+            hour.push(samples[i].SECS/3600);
             hr.push(samples[i].HR);
             lat.push(samples[i].LAT);
             lon.push(samples[i].LON);
@@ -30,18 +32,45 @@ document.getElementById('import').onclick = function() {
             alt.push(samples[i].ALT);
         }
 
-        var hrTrace = {
-            x: sec,
-            y: hr,
-            type: 'scatter'
-        };
+        function makeTrace(yData, name, yAxis) {
+            var trace = {
+                x: hour,
+                y: yData,
+                name: name,
+                type: 'scatter',
+                yaxis: yAxis
+            };
+            return trace;
+        }
 
-        var data = [hrTrace];
-        Plotly.newPlot('mainPlot', data);
+        var hrTrace = makeTrace(hr, "hr", "y");
+        var kphTrace = makeTrace(kph, "kph", "y2");
+        var altTrace = makeTrace(alt, "alt", "y3");
+
+        var data = [hrTrace, kphTrace, altTrace];
+        var layout = {
+            title: 'Workout data',
+            yaxis: {title: 'bpm'},
+            yaxis2: {
+                title: 'kph',
+                anchor: 'free',
+                titlefont: {color: '#ff7f0e'},
+                tickfont: {color: '#ff7f0e'},
+                side: 'left',
+                position: -1.02,
+                overlaying: 'y'
+            },
+            yaxis3: {
+                title: 'm',
+                anchor: 'x',
+                side: 'right',
+                overlaying: 'y'
+            }
+        }
+        Plotly.newPlot('mainPlot', data, layout);
 
         var formatted = JSON.stringify(result, null, 2);
         document.getElementById('result').value = formatted;
     }
     reader.readAsText(files.item(0));
 }
-
