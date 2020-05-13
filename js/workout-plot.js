@@ -1,3 +1,5 @@
+var L = L || require('leaflet');
+
 const fileSelector = document.getElementById("file-selector");
 fileSelector.addEventListener("change", (event) => {
     const fileList = event.target.files;
@@ -7,8 +9,7 @@ fileSelector.addEventListener("change", (event) => {
 var sec = []; 
 var hour = []; 
 var hr = [];
-var lat = [];
-var lon = [];
+var latlon = [];
 var kph = [];
 var alt = [];
 
@@ -26,11 +27,11 @@ document.getElementById('import').onclick = function() {
             sec.push(samples[i].SECS);
             hour.push(samples[i].SECS/3600);
             hr.push(samples[i].HR);
-            lat.push(samples[i].LAT);
-            lon.push(samples[i].LON);
+            latlon.push([samples[i].LAT, samples[i].LON]);
             kph.push(samples[i].KPH);
             alt.push(samples[i].ALT);
         }
+        console.log(latlon);
 
         function makeTrace(yData, name, yAxis=null) {
             var trace = {
@@ -71,14 +72,14 @@ document.getElementById('import').onclick = function() {
         }
         Plotly.newPlot('mainPlot', data, layout);
 
-        var mapTrace = {
-            x: lat,
-            y: lon,
-            name: "map"
-        };
+        // var mapTrace = {
+        //     x: lat,
+        //     y: lon,
+        //     name: "map"
+        // };
 
-        var mapData = [mapTrace];
-        Plotly.newPlot('mapPlot', mapData);
+        // var mapData = [mapTrace];
+        // Plotly.newPlot('mapPlot', mapData);
 
         var map = L.map('map');//.setView([60.14, 10.25], 11);
 //         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
