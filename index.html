@@ -3,7 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <title>Workout Visualizer</title>
-        <link href="style.css" rel="stylesheet" type="text/css" title="Stylesheet">
+        <link href="css/style.css" rel="stylesheet" type="text/css" title="Stylesheet">
+        <link rel="stylesheet" href="js/leaflet/leaflet.css" />
+        <script src="js/leaflet/leaflet.js"></script>
         <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
     </head>
 
@@ -14,6 +16,9 @@
         <button id="import">Import</button>
         <textarea id="result"></textarea>
         <div id='mainPlot'></div>
+        <div id='mapPlot'></div>
+        <div id="map" style="height: 400px; width: 100%;"></div>
+
     
     
     </body>
